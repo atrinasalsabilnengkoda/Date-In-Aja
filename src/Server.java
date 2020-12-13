@@ -1,133 +1,139 @@
-import java.io.BufferedReader;
-import java.io.I;
-import java.io.IOException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
+import java.io.*;
+import java.net.*;
+import java.sql.Connection;
+import java.util.*;
 
 
 public class Server extends javax.swing.JPanel {
     
-    
-   private ServerSocket serverSocket;
-    private int port;
-    private boolean running = false;
+   ArrayList<String> Users;
+   ArrayList ClientOutputStreams;
 
-    public Server( int port )
-    {
-        this.port = port;
-    }
+   
+   public class clientManager implements Runnable	
+   {
+       BufferedReader reader;
+       Socket Socket;
+       PrintWriter Client;
 
-    public void startServer() throws IOException
-    {
-        serverSocket = new ServerSocket( port );
-        this.start();
-    }
-
-    public void stopServer()
-    {
-        running = false;
-        this.interrupt();
-    }
-
-    @Override
-    public void run() throws IOException
-    {
-        running = true;
-        while( running )
-        {
-            System.out.println( "Listening for a connection" );
-            // Call accept() to receive the next connection
-            Socket socket = serverSocket.accept();
-            // Pass the socket to the RequestHandler thread for processing
-            RequestHandler requestHandler = new RequestHandler( socket );
-            requestHandler.start();
-        }
-    }
-    public static void main( String[] args )
-    {
-        if( args.length == 0 )
-        {
-            System.out.println( "Usage: SimpleSocketServer <port>" );
-            System.exit( 0 );
-        }
-        int port = Integer.parseInt( args[ 0 ] );
-        System.out.println( "Start server on port: " + port );
-
-        SimpleSocketServer server = new SimpleSocketServer( port );
-        server.startServer();
-
-        // Automatically shutdown in 1 minute
-        try
-        {
-            Thread.sleep( 60000 );
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
-
-        server.stopServer();
-    }
-
-    private void start() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    private void interrupt() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-}
-
-class RequestHandler extends Thread
-{
-    private Socket socket;
-    RequestHandler( Socket socket )
-    {
-        this.socket = socket;
-    }
-
-    @Override
-    public void run()
-    {
-        try
-        {
-            System.out.println( "Received a connection" );
-
-            // Get input and output streams
-            BufferedReader in = new BufferedReader( new InputStreamReader( socket.getInputStream() ) );
-            PrintWriter out = new PrintWriter( socket.getOutputStream() );
-
-            // Write out our header to the client
-            out.println( "Echo Server 1.0" );
-            out.flush();
-
-            // Echo lines back to the client until the client closes the connection or we receive an empty line
-            String line = in.readLine();
-            while( line != null && line.length() > 0 )
+       public clientManager(Socket clientSocket, PrintWriter user) 
+       {
+            Client = user;
+            try 
             {
-                out.println( "Echo: " + line );
-                out.flush();
-                line = in.readLine();
+                Socket = clientSocket;
+                InputStreamReader isReader = new InputStreamReader(Socket.getInputStream());
+                reader = new BufferedReader(isReader);
+            }
+            catch (Exception ex) 
+            {
+                chat.append("Error\n");
             }
 
-            // Close our connection
-            in.close();
-            out.close();
-            socket.close();
+       }
 
-            System.out.println( "Connection closed" );
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
+       @Override
+       public void run() 
+       {
+            String message;
+            String connect = "C";
+            String disconnect = "D";
+            String chat = "t" ;
+            String[] data;
+
+            try 
+            {
+                while ((message = reader.readLine()) != null) 
+                {
+                  
+                    data = message.split(":");
+                    
+                    for (String token:data) 
+                    {
+                        Server.this.chat.append(token + "\n");
+                    }
+
+                    if (data[2].equals(connect)) 
+                    {
+                        Spread((data[0] + ":" + data[1] + ":" + chat));
+                        userAdd(data[0]);
+                    } 
+                    else if (data[2].equals(disconnect)) 
+                    {
+                        Spread((data[0] + ": disconnected" + ":" + chat));
+                        userRemove(data[0]);
+                    } 
+                    else if (data[2].equals(chat)) 
+                    {
+                        Spread(message);
+                    } 
+                    else 
+                    {
+                     //  chat.append("Disconnected\n");
+                    }
+                } 
+             } 
+             catch (Exception ex) 
+             {
+                Server.this.chat.append("disconnected \n");
+                ex.printStackTrace();
+                ClientOutputStreams.remove(Client);
+             }}
+
+        
     }
+    
    
     public Server() {
         initComponents();
+    }
+    
+    public static void main(String args[]) 
+    {
+        java.awt.EventQueue.invokeLater(new Runnable() 
+        {
+            @Override
+            public void run() 
+            {
+                new Server().setVisible(true);
+            }
+        });
+    }
+    
+    public class Connection implements Runnable 
+    {
+        @Override
+        public void run() 
+        {
+            ClientOutputStreams = new ArrayList();
+            Users = new ArrayList(); 
+            //establish connection
+            try 
+            {
+                // creating server socket 
+                ServerSocket serverSock = new ServerSocket(1000);
+                boolean flag = true;
+                while (flag) 
+                {                
+                                // creting client socket 
+				Socket clientSock = serverSock.accept();
+				PrintWriter writer = new PrintWriter(clientSock.getOutputStream());
+                                // adding clients in to an array
+				ClientOutputStreams.add(writer);
+                                // creating threds to listen to every client 
+				Thread listener = new Thread(new clientManager(clientSock, writer));
+				listener.start();
+				chat.append("Connection successful \n");
+                }
+            }
+            catch (Exception ex)
+            {
+                chat.append("ERROR \n");
+            }
+        }
     }
 
     /**
@@ -140,7 +146,7 @@ class RequestHandler extends Thread
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
+        chat = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         btnStart = new javax.swing.JButton();
         btnEnd = new javax.swing.JButton();
@@ -152,9 +158,9 @@ class RequestHandler extends Thread
         setName(""); // NOI18N
         setPreferredSize(new java.awt.Dimension(579, 412));
 
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jScrollPane1.setViewportView(jTextArea1);
+        chat.setColumns(20);
+        chat.setRows(5);
+        jScrollPane1.setViewportView(chat);
 
         jLabel1.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -168,6 +174,11 @@ class RequestHandler extends Thread
         btnStart.setMaximumSize(new java.awt.Dimension(145, 31));
         btnStart.setMinimumSize(new java.awt.Dimension(145, 31));
         btnStart.setPreferredSize(new java.awt.Dimension(145, 31));
+        btnStart.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnStartActionPerformed(evt);
+            }
+        });
 
         btnEnd.setBackground(new java.awt.Color(255, 255, 255));
         btnEnd.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
@@ -176,11 +187,21 @@ class RequestHandler extends Thread
         btnEnd.setMaximumSize(new java.awt.Dimension(145, 31));
         btnEnd.setMinimumSize(new java.awt.Dimension(145, 31));
         btnEnd.setPreferredSize(new java.awt.Dimension(145, 31));
+        btnEnd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEndActionPerformed(evt);
+            }
+        });
 
         btnOnlineUser.setBackground(new java.awt.Color(255, 255, 255));
         btnOnlineUser.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         btnOnlineUser.setForeground(new java.awt.Color(102, 102, 255));
         btnOnlineUser.setText("Online Users");
+        btnOnlineUser.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOnlineUserActionPerformed(evt);
+            }
+        });
 
         btnClear.setBackground(new java.awt.Color(255, 255, 255));
         btnClear.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
@@ -189,6 +210,11 @@ class RequestHandler extends Thread
         btnClear.setMaximumSize(new java.awt.Dimension(145, 31));
         btnClear.setMinimumSize(new java.awt.Dimension(145, 31));
         btnClear.setPreferredSize(new java.awt.Dimension(145, 31));
+        btnClear.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnClearActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -207,7 +233,7 @@ class RequestHandler extends Thread
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(btnOnlineUser))
-                        .addGap(0, 8, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addComponent(jScrollPane1))
                 .addContainerGap())
         );
@@ -233,14 +259,128 @@ class RequestHandler extends Thread
         );
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        chat.setText("");
+    }//GEN-LAST:event_btnClearActionPerformed
 
+    private void btnOnlineUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOnlineUserActionPerformed
+        chat.append("\n Online users : \n");
+        for (String current_user : Users)
+        {
+            chat.append(current_user);
+            chat.append("\n");
+        }
+    }//GEN-LAST:event_btnOnlineUserActionPerformed
+
+    private void btnEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndActionPerformed
+        Spread("Server: turning off \n:t");
+        try
+        {
+            
+            Thread.sleep(450);
+            
+            CloseMe();
+        }
+        catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();}
+          chat.append("Shutting down\n");
+        Spread("Server: turning off \n:t");
+     
+        chat.setText("");
+    }//GEN-LAST:event_btnEndActionPerformed
+
+    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
+        Thread starter = new Thread(new Connection() {});
+        starter.start();
+
+        chat.append("Booting\n");
+    }//GEN-LAST:event_btnStartActionPerformed
+
+    public void Clear_ButtonAction() {
+        ActionEvent event;
+        long when;
+        when  = System.currentTimeMillis();
+        event = new ActionEvent(this.btnClear, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
+        btnClearActionPerformed(event);
+    }
+    
+    public void Online_Users_ButtonAction() {
+        ActionEvent event;
+        long when;
+        when  = System.currentTimeMillis();
+        event = new ActionEvent(this.btnOnlineUser, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
+        btnOnlineUserActionPerformed(event);
+    } 
+    
+    public void userAdd (String data) 
+    {
+        String message;
+        String add = ": :C";
+       
+        String name = data;
+        Users.add(name);
+        chat.append(name + " added. \n");
+        String[] tempList = new String[(Users.size())];
+        Users.toArray(tempList);
+
+        for (String token:tempList) 
+        {
+            message = (token + add);
+   
+        }
+    
+    }
+    
+    public void userRemove (String data) 
+    {
+        String message;
+        String add = ": :C";
+        
+        String name = data;
+        Users.remove(name);
+        chat.append(name + " removed.\n");
+        String[] tempList = new String[(Users.size())];
+        Users.toArray(tempList);
+
+        for (String token:tempList) 
+        {
+            message = (token + add);
+         
+        }
+       
+    }
+    public void Spread(String message) 
+    {
+	Iterator it = ClientOutputStreams.iterator();
+        while (it.hasNext()) 
+        {
+            try 
+            {
+                PrintWriter writer = (PrintWriter) it.next();
+		writer.println(message);
+		//c_chat.append("Sending: " + message + "\n");
+                writer.flush();
+                chat.setCaretPosition(chat.getDocument().getLength());
+            } 
+            catch (Exception ex) 
+            {
+		chat.append("Error \n");
+            }
+        } 
+    }
+    
+    private void CloseMe()
+            {
+                
+                
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnEnd;
     private javax.swing.JButton btnOnlineUser;
     private javax.swing.JButton btnStart;
+    private javax.swing.JTextArea chat;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
     // End of variables declaration//GEN-END:variables
 }

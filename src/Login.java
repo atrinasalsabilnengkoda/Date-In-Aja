@@ -16,6 +16,17 @@ public class Login extends javax.swing.JPanel {
     public Login() {
         initComponents();
     }
+    
+     public static void main(String args[]) {
+
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new Login().setVisible(true);
+            } }); 
+    
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -49,6 +60,11 @@ public class Login extends javax.swing.JPanel {
         btnLogin.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         btnLogin.setForeground(new java.awt.Color(102, 102, 255));
         btnLogin.setText("LOGIN");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         jLabel3.setForeground(new java.awt.Color(102, 102, 255));
@@ -61,6 +77,11 @@ public class Login extends javax.swing.JPanel {
         jComboBox1.setFont(new java.awt.Font("Rockwell", 0, 18)); // NOI18N
         jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select Gender", "Male", "Female" }));
         jComboBox1.setPreferredSize(new java.awt.Dimension(85, 28));
+        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jComboBox1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -107,6 +128,15 @@ public class Login extends javax.swing.JPanel {
                 .addGap(42, 42, 42))
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jComboBox1ActionPerformed
+
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        String username = inputUsername.getText();
+        String gender = jComboBox1.getSelectedItem().toString();
+    }//GEN-LAST:event_btnLoginActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
