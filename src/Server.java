@@ -1,138 +1,68 @@
-
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
-import java.io.*;
-import java.net.*;
-import java.sql.Connection;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 
-public class Server extends javax.swing.JPanel {
+public class Server extends javax.swing.JFrame {
+    ArrayList<String> Users;
+    ArrayList ClientOutputStreams;
     
+    public class clientManager implements Runnable{
+        BufferedReader Reader;
+        Socket Socket;
+        PrintWriter Client;
 
-   ArrayList<String> Users;
-   ArrayList ClientOutputStreams;
-   
-   public class clientManager implements Runnable	
-   {
-       BufferedReader reader;
-       Socket Socket;
-       PrintWriter Client;
-
-       public clientManager(Socket clientSocket, PrintWriter user) 
-       {
-            Client = user;
-            try 
-            {
-                Socket = clientSocket;
-                InputStreamReader isReader = new InputStreamReader(Socket.getInputStream());
-                reader = new BufferedReader(isReader);
-            }
-            catch (Exception ex) 
-            {
-                chat.append("Error\n");
-            }
-
-       }
-
-       @Override
-       public void run() 
-       {
-            String message;
-            String connect = "C";
-            String disconnect = "D";
-            String chat = "t" ;
-            String[] data;
-
-            try 
-            {
-                while ((message = reader.readLine()) != null) 
-                {
-                  
-                    data = message.split(":");
-                    
-                    for (String token:data) 
-                    {
-                        Server.this.chat.append(token + "\n");
-                    }
-
-                    if (data[2].equals(connect)) 
-                    {
-                        Spread((data[0] + ":" + data[1] + ":" + chat));
-                        userAdd(data[0]);
-                    } 
-                    else if (data[2].equals(disconnect)) 
-                    {
-                        Spread((data[0] + ": disconnected" + ":" + chat));
-                        userRemove(data[0]);
-                    } 
-                    else if (data[2].equals(chat)) 
-                    {
-                        Spread(message);
-                    } 
-                    else 
-                    {
-                     //  chat.append("Disconnected\n");
-                    }
-                } 
-             } 
-             catch (Exception ex) 
-             {
-                Server.this.chat.append("disconnected \n");
-                ex.printStackTrace();
-                ClientOutputStreams.remove(Client);
-             }}}
-
-
-   
-    public Server() {
-        initComponents();
+    public clientManager(Socket clientSocket, PrintWriter user){
+        Client = user;
+        try {
+            Socket = clientSocket;
+            InputStreamReader isReader = new InputStreamReader(Socket.getInputStream());
+            Reader = new BufferedReader(isReader);
+        }catch (Exception ex) {
+            Chat.append("Unexpected error... \n");
+        }
     }
-    
-    public static void main(String args[]) 
-    {
-           java.awt.EventQueue.invokeLater(() -> {
-            new Server().setVisible(true);
-        });
-        
-    }
-    
-    public class Connection implements Runnable 
-    {
-        @Override
-        public void run() 
-        {
-            ClientOutputStreams = new ArrayList();
-            Users = new ArrayList(); 
-            //establish connection
-            try 
-            {
-                // creating server socket 
-                ServerSocket serverSock = new ServerSocket(1000);
-                boolean flag = true;
-                while (flag) 
-                {                
-                                // creting client socket 
-				Socket clientSock = serverSock.accept();
-				PrintWriter writer = new PrintWriter(clientSock.getOutputStream());
-                                // adding clients in to an array
-				ClientOutputStreams.add(writer);
-                                // creating threds to listen to every client 
-				Thread listener = new Thread(new clientManager(clientSock, writer));
-				listener.start();
-				chat.append("Connection successful \n");
+
+    @Override
+    public void run() {
+        String message, connect = "Connect", disconnect = "Disconnect", chat = "Chat" ;
+        String[] data;
+        try {
+            while ((message = Reader.readLine()) != null) {
+                data = message.split(":");
+                for (String token:data) {
+                    Server.this.Chat.append(token + "\n");
+                }
+                if (data[2].equals(connect)) {
+                    Spread((data[0] + ":" + data[1] + ":" + chat));
+                    userAdd(data[0]);
+                } else if (data[2].equals(disconnect)) {
+                    Spread((data[0] + ": disconnected" + ":" + chat));
+                    userRemove(data[0]);
+                } else if (data[2].equals(chat)) {
+                    Spread(message);
+                } else {
+                    Chat.append("No Conditions were met. \n");
                 }
             }
-            catch (Exception ex)
-            {
-                chat.append("ERROR \n");
+        } catch (Exception ex) {
+             Server.this.Chat.append("Lost a connection. \n");
+             ex.printStackTrace();
+             ClientOutputStreams.remove(Client);
             }
         }
     }
-    
-    
-   
+    public Server() {
+        initComponents();
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -143,8 +73,9 @@ public class Server extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        chat = new javax.swing.JTextArea();
+        Chat = new javax.swing.JTextArea();
         jLabel1 = new javax.swing.JLabel();
         btnStart = new javax.swing.JButton();
         btnEnd = new javax.swing.JButton();
@@ -152,13 +83,20 @@ public class Server extends javax.swing.JPanel {
         btnClear = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(102, 102, 255));
-        setMaximumSize(new java.awt.Dimension(550, 355));
+        setMinimumSize(new java.awt.Dimension(579, 412));
         setName(""); // NOI18N
-        setPreferredSize(new java.awt.Dimension(579, 412));
 
-        chat.setColumns(20);
-        chat.setRows(5);
-        jScrollPane1.setViewportView(chat);
+        jPanel1.setBackground(new java.awt.Color(102, 102, 255));
+        jPanel1.setMaximumSize(new java.awt.Dimension(579, 412));
+        jPanel1.setMinimumSize(new java.awt.Dimension(579, 412));
+        jPanel1.setPreferredSize(new java.awt.Dimension(579, 412));
+
+        Chat.setColumns(20);
+        Chat.setFont(new java.awt.Font("Monospaced", 0, 12)); // NOI18N
+        Chat.setRows(5);
+        Chat.setMaximumSize(new java.awt.Dimension(204, 79));
+        Chat.setMinimumSize(new java.awt.Dimension(204, 79));
+        jScrollPane1.setViewportView(Chat);
 
         jLabel1.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -182,9 +120,9 @@ public class Server extends javax.swing.JPanel {
         btnEnd.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         btnEnd.setForeground(new java.awt.Color(102, 102, 255));
         btnEnd.setText("END");
-        btnEnd.setMaximumSize(new java.awt.Dimension(145, 31));
-        btnEnd.setMinimumSize(new java.awt.Dimension(145, 31));
-        btnEnd.setPreferredSize(new java.awt.Dimension(145, 31));
+        btnEnd.setMaximumSize(new java.awt.Dimension(145, 30));
+        btnEnd.setMinimumSize(new java.awt.Dimension(145, 30));
+        btnEnd.setPreferredSize(new java.awt.Dimension(145, 30));
         btnEnd.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEndActionPerformed(evt);
@@ -195,6 +133,9 @@ public class Server extends javax.swing.JPanel {
         btnOnlineUser.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         btnOnlineUser.setForeground(new java.awt.Color(102, 102, 255));
         btnOnlineUser.setText("Online Users");
+        btnOnlineUser.setMaximumSize(new java.awt.Dimension(145, 30));
+        btnOnlineUser.setMinimumSize(new java.awt.Dimension(145, 30));
+        btnOnlineUser.setPreferredSize(new java.awt.Dimension(145, 30));
         btnOnlineUser.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnOnlineUserActionPerformed(evt);
@@ -205,78 +146,76 @@ public class Server extends javax.swing.JPanel {
         btnClear.setFont(new java.awt.Font("Rockwell", 1, 18)); // NOI18N
         btnClear.setForeground(new java.awt.Color(102, 102, 255));
         btnClear.setText("Clear");
-        btnClear.setMaximumSize(new java.awt.Dimension(145, 31));
-        btnClear.setMinimumSize(new java.awt.Dimension(145, 31));
-        btnClear.setPreferredSize(new java.awt.Dimension(145, 31));
+        btnClear.setMaximumSize(new java.awt.Dimension(145, 30));
+        btnClear.setMinimumSize(new java.awt.Dimension(145, 30));
+        btnClear.setPreferredSize(new java.awt.Dimension(145, 30));
         btnClear.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnClearActionPerformed(evt);
             }
         });
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
-        this.setLayout(layout);
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnOnlineUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnOnlineUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(28, 28, 28)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(52, 52, 52))
+        );
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnOnlineUser))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jScrollPane1))
-                .addContainerGap())
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 569, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnOnlineUser))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClear, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 262, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(22, 22, 22))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 375, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-       
+        Chat.setText("");
     }//GEN-LAST:event_btnClearActionPerformed
 
-    private void btnOnlineUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOnlineUserActionPerformed
-      
-    }//GEN-LAST:event_btnOnlineUserActionPerformed
-
-    private void btnEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndActionPerformed
-       
-    }//GEN-LAST:event_btnEndActionPerformed
-
-    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        Thread starter = new Thread(new Connection());
-        starter.start();
-
-        chat.append("Booting\n");
-    }//GEN-LAST:event_btnStartActionPerformed
-
-    public void Clear_ButtonAction() {
+    public void btnClearAction() {
         ActionEvent event;
         long when;
         when  = System.currentTimeMillis();
@@ -284,75 +223,133 @@ public class Server extends javax.swing.JPanel {
         btnClearActionPerformed(event);
     }
     
-    public void userAdd (String data) 
-    {
-        String message;
-        String add = ": :C";
-       
-        String name = data;
+    private void btnOnlineUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOnlineUserActionPerformed
+        Chat.append("\n Online users : \n");
+        for (String current_user : Users)
+        {
+            Chat.append(current_user);
+            Chat.append("\n");
+        }
+    }//GEN-LAST:event_btnOnlineUserActionPerformed
+
+    public void btnOnlineUserAction() {
+        ActionEvent event;
+        long when;
+        when  = System.currentTimeMillis();
+        event = new ActionEvent(this.btnOnlineUser, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
+        btnOnlineUserActionPerformed(event);
+    }
+    
+    private void btnEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndActionPerformed
+        Spread("Server: turning off \n:t");
+        try{
+            Thread.sleep(450);
+            CloseMe();
+        }catch(InterruptedException ex) {
+            Thread.currentThread().interrupt();
+        }
+        Chat.append("Server stopping... \n");
+        Spread("Server:is stopping and all users will be disconnected.\n:Chat");
+        Chat.setText("");
+    }//GEN-LAST:event_btnEndActionPerformed
+
+    private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
+        Thread starter = new Thread(new Connection());
+        starter.start();
+        Chat.append("Server started...\n");
+    }//GEN-LAST:event_btnStartActionPerformed
+
+    public static void main(String args[]) {
+        java.awt.EventQueue.invokeLater(new Runnable() 
+        {
+            @Override
+            public void run() {
+                new Server().setVisible(true);
+            }
+        });
+    }
+    // this class will be initialized or started when the startbutton has been pressed.
+    // first component that will run 
+    // it is runned by threds
+    public class Connection implements Runnable {
+        @Override
+        public void run() {
+            ClientOutputStreams = new ArrayList();
+            Users = new ArrayList(); 
+            //establish connection
+            try {
+                // creating server socket 
+                ServerSocket serverSock = new ServerSocket(1000);
+                boolean flag = true;
+                while (flag) {                
+                    // creting client socket 
+                    Socket clientSock = serverSock.accept();
+                    PrintWriter writer = new PrintWriter(clientSock.getOutputStream());
+                    // adding clients in to an array
+                    ClientOutputStreams.add(writer);
+                    // creating threds to listen to every client 
+                    Thread listener = new Thread(new clientManager(clientSock, writer));
+                    listener.start();
+                    Chat.append("Connection successful \n");
+                }
+            }catch (Exception ex){
+                Chat.append("Error making a connection. \n");
+            }
+        }
+    }
+    
+    public void userAdd (String data) {
+        String message, add = ": :Connect", done = "Server: :Done", name = data;
+        Chat.append("Before " + name + " added. \n");
         Users.add(name);
-        chat.append(name + " added. \n");
+        Chat.append("After " + name + " added. \n");
         String[] tempList = new String[(Users.size())];
         Users.toArray(tempList);
 
-        for (String token:tempList) 
-        {
+        for (String token:tempList) {
             message = (token + add);
-   
         }
-    
     }
     
-     public void userRemove (String data) 
-    {
-        String message;
-        String add = ": :C";
-        
-        String name = data;
+    public void userRemove (String data) {
+        String message, add = ": :Connect", done = "Server: :Done", name = data;
         Users.remove(name);
-        chat.append(name + " removed.\n");
+        Chat.append(name + " removed.\n");
         String[] tempList = new String[(Users.size())];
         Users.toArray(tempList);
 
-        for (String token:tempList) 
-        {
+        for (String token:tempList) {
             message = (token + add);
-         
         }
-       
     }
-     
-     public void Spread(String message) 
-    {
+    
+    public void Spread(String message) {
 	Iterator it = ClientOutputStreams.iterator();
-        while (it.hasNext()) 
-        {
-            try 
-            {
+        while (it.hasNext()) {
+            try {
                 PrintWriter writer = (PrintWriter) it.next();
 		writer.println(message);
-		//c_chat.append("Sending: " + message + "\n");
+		Chat.append("Sending: " + message + "\n");
                 writer.flush();
-                chat.setCaretPosition(chat.getDocument().getLength());
-            } 
-            catch (Exception ex) 
-            {
-		chat.append("Error \n");
+                Chat.setCaretPosition(Chat.getDocument().getLength());
+            } catch (Exception ex) {
+		Chat.append("Error \n");
             }
         } 
     }
-    
-    
-    
-    
+      private void CloseMe(){
+        WindowEvent meClose= new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(meClose);      
+      }
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea Chat;
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnEnd;
     private javax.swing.JButton btnOnlineUser;
     private javax.swing.JButton btnStart;
-    private javax.swing.JTextArea chat;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
