@@ -1,3 +1,4 @@
+
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
@@ -9,9 +10,9 @@ import java.util.*;
 
 public class Server extends javax.swing.JPanel {
     
+
    ArrayList<String> Users;
    ArrayList ClientOutputStreams;
-
    
    public class clientManager implements Runnable	
    {
@@ -81,11 +82,9 @@ public class Server extends javax.swing.JPanel {
                 Server.this.chat.append("disconnected \n");
                 ex.printStackTrace();
                 ClientOutputStreams.remove(Client);
-             }}
+             }}}
 
-        
-    }
-    
+
    
     public Server() {
         initComponents();
@@ -93,14 +92,10 @@ public class Server extends javax.swing.JPanel {
     
     public static void main(String args[]) 
     {
-        java.awt.EventQueue.invokeLater(new Runnable() 
-        {
-            @Override
-            public void run() 
-            {
-                new Server().setVisible(true);
-            }
+           java.awt.EventQueue.invokeLater(() -> {
+            new Server().setVisible(true);
         });
+        
     }
     
     public class Connection implements Runnable 
@@ -135,6 +130,9 @@ public class Server extends javax.swing.JPanel {
             }
         }
     }
+    
+    
+   
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -260,37 +258,19 @@ public class Server extends javax.swing.JPanel {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
-        chat.setText("");
+       
     }//GEN-LAST:event_btnClearActionPerformed
 
     private void btnOnlineUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnOnlineUserActionPerformed
-        chat.append("\n Online users : \n");
-        for (String current_user : Users)
-        {
-            chat.append(current_user);
-            chat.append("\n");
-        }
+      
     }//GEN-LAST:event_btnOnlineUserActionPerformed
 
     private void btnEndActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEndActionPerformed
-        Spread("Server: turning off \n:t");
-        try
-        {
-            
-            Thread.sleep(450);
-            
-            CloseMe();
-        }
-        catch(InterruptedException ex) {
-            Thread.currentThread().interrupt();}
-          chat.append("Shutting down\n");
-        Spread("Server: turning off \n:t");
-     
-        chat.setText("");
+       
     }//GEN-LAST:event_btnEndActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
-        Thread starter = new Thread(new Connection() {});
+        Thread starter = new Thread(new Connection());
         starter.start();
 
         chat.append("Booting\n");
@@ -303,14 +283,6 @@ public class Server extends javax.swing.JPanel {
         event = new ActionEvent(this.btnClear, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
         btnClearActionPerformed(event);
     }
-    
-    public void Online_Users_ButtonAction() {
-        ActionEvent event;
-        long when;
-        when  = System.currentTimeMillis();
-        event = new ActionEvent(this.btnOnlineUser, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
-        btnOnlineUserActionPerformed(event);
-    } 
     
     public void userAdd (String data) 
     {
@@ -331,7 +303,7 @@ public class Server extends javax.swing.JPanel {
     
     }
     
-    public void userRemove (String data) 
+     public void userRemove (String data) 
     {
         String message;
         String add = ": :C";
@@ -349,7 +321,8 @@ public class Server extends javax.swing.JPanel {
         }
        
     }
-    public void Spread(String message) 
+     
+     public void Spread(String message) 
     {
 	Iterator it = ClientOutputStreams.iterator();
         while (it.hasNext()) 
@@ -369,11 +342,10 @@ public class Server extends javax.swing.JPanel {
         } 
     }
     
-    private void CloseMe()
-            {
-                
-                
-    }
+    
+    
+    
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClear;
     private javax.swing.JButton btnEnd;
