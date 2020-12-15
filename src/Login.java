@@ -3,6 +3,7 @@ import java.awt.Toolkit;
 import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowEvent;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,9 +23,11 @@ import java.sql.Statement;
  * @author atrin
  */
 public class Login extends javax.swing.JFrame {
-    java.sql.Connection conn=null;
-    ResultSet rs=null;
-    Statement st;
+    private Connection koneksi;
+    private Connect db = new Connect();
+//    java.sql.Connection conn=null;
+//    ResultSet rs=null;
+//    Statement st;
     /**
      * Creates new form Login
      */
@@ -148,93 +151,82 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_txtUsernameActionPerformed
 
     private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-        String gender = (String) selectGender.getSelectedItem();
-       
-        try{
-            Class.forName("org.sqlite.JDBC");
-            java.sql.Connection conn= DriverManager.getConnection("jdbc:sqlite:DateInAja.db");
-            java.sql.Statement st=(Statement)conn.createStatement();
-            String DBQ="select * from login where username='"+txtUsername.getText()+"' AND password='"+txtPassword.getText()+"' ";
-            rs=st.executeQuery(DBQ);
-            if(rs.next())
-               JOptionPane.showMessageDialog(null,"You have successfully logged In.");
-            else
-               JOptionPane.showMessageDialog(null,"Login Information is Incorrect.");
-        }catch(ClassNotFoundException | SQLException | HeadlessException e){
-            System.err.println(e);
-        }
-    
-        try { 
-            int log=1;
-            java.sql.Connection conn;
-            conn = DriverManager.getConnection("jdbc:sqlite:DateInAja.db");
-            st=(Statement)conn.createStatement();
-            rs=st.executeQuery("select * from login");
-         
-            while(rs.next()){
-                if(rs.getString(1).equals(username)&& rs.getString(2).equals(password)) {
-                    log=0;
-                    break;
-                }
-            }
-            if(log==0){   
-                CloseMe();
-                st.close();
-                conn.close();
-                
-                 //this.setVisible(false);
-                String info[]=new String[1];  //creates an array to store  variable values. You can increase the size when needed
- 
-                info[0]= txtUsername.getText(); //put jTextField1's value in the array.
-                
-                ClientMale.main(info); // call Frame2. Here we create an object of a Frame2. We are passing info as arguments to main function.
-                
-                this.setVisible(true); // hiding this form
+         db.dbConnection();
+        try {
+            String sql = "SELECT * FROM users WHERE username = '" + txtUsername.getText() + "' AND password = '" + txtPassword.getText() + "'";
+            Statement st = db.getConnection().createStatement();
+            ResultSet rsLogin = st.executeQuery(sql);
 
-            }
-            else
-                JOptionPane.showMessageDialog(null,"Please try again","Login system",JOptionPane.ERROR_MESSAGE);
-                txtUsername.setText("");
+            rsLogin.next();
+            rsLogin.last(); //mengecek jumlah baris pada hasil query
+            if (rsLogin.getRow()==1){
+                JOptionPane.showMessageDialog(null, "Login Berhasil!");
+                 new ClientFemale().setVisible(true); //<-- BILA MAU DIARAHKAN KE Frame Menu Utama
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Maaf, Username / Password salah!");
                 txtPassword.setText("");
-                txtUsername.grabFocus();
-        }catch (SQLException ex) {
-            Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.print("Connection to DataBase is failed!\n");
+                txtPassword.requestFocus();
+            }
+        } catch (SQLException e) {
         }
     }//GEN-LAST:event_btnLoginActionPerformed
 
     // for test 
     
-    public void btnLogin() {
-        ActionEvent event;
-        long when;
-        when  = System.currentTimeMillis();
-        event = new ActionEvent(this.btnLogin, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
-        btnLoginActionPerformed(event);
-    }
+//    public void btnLogin() {
+//        ActionEvent event;
+//        long when;
+//        when  = System.currentTimeMillis();
+//        event = new ActionEvent(this.btnLogin, ActionEvent.ACTION_PERFORMED, "Anything", when, 0);
+//        btnLoginActionPerformed(event);
+//    }
+//    
+//    public String getusername(){
+//        String username= txtUsername.getText();
+//        return(username);
+//    }
+//    
+//    
+//    public void setusername(String name ){
+//        name = txtUsername.getText();
+//    }
+//  
+//    private void CloseMe(){
+//        WindowEvent meClose= new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
+//        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(meClose);
+//    }
     
-    public String getusername(){
-        String username= txtUsername.getText();
-        return(username);
-    }
-    
-    
-    public void setusername(String name ){
-        name = txtUsername.getText();
-    }
-  
-    private void CloseMe(){
-        WindowEvent meClose= new WindowEvent(this, WindowEvent.WINDOW_CLOSING);
-        Toolkit.getDefaultToolkit().getSystemEventQueue().postEvent(meClose);
-    }
-    
-    public static void main(String args[]) {
+     public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(New.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(New.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(New.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(New.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new Login().setVisible(true);
-            } }); 
+            }
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
