@@ -23,7 +23,7 @@ public class ClientFemale extends javax.swing.JFrame {
     int Port = 1000;
     Boolean isConnected = false;
     
-    Socket Socket;
+    Socket socket;
     BufferedReader Reader;
     PrintWriter Writer;
     
@@ -32,7 +32,7 @@ public class ClientFemale extends javax.swing.JFrame {
     // creating threads 
     public void ListenThread() 
     {
-         Thread IncomingReader = new Thread(new ClientFemale.IncomingReader());
+         Thread IncomingReader = new Thread(new IncomingReader());
          IncomingReader.start();
     }
     
@@ -118,32 +118,26 @@ public class ClientFemale extends javax.swing.JFrame {
            }catch(Exception ex) { }
         }
     }
-    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        btnStart = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
+        btnEnd = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         Chat = new javax.swing.JTextArea();
-        jLabel1 = new javax.swing.JLabel();
-        btnStart = new javax.swing.JButton();
-        btnEnd = new javax.swing.JButton();
-        inputType = new javax.swing.JTextField();
         btnSend = new javax.swing.JButton();
+        inputType = new javax.swing.JTextField();
 
-        setBackground(new java.awt.Color(255, 204, 204));
-        setMaximumSize(new java.awt.Dimension(550, 355));
+        setBackground(new java.awt.Color(153, 204, 255));
+        setMinimumSize(new java.awt.Dimension(579, 412));
         setName(""); // NOI18N
 
-        Chat.setColumns(20);
-        Chat.setFont(new java.awt.Font("Rockwell", 0, 12)); // NOI18N
-        Chat.setRows(5);
-        jScrollPane1.setViewportView(Chat);
-
-        jLabel1.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("DateInAja");
+        jPanel1.setBackground(new java.awt.Color(255, 204, 204));
+        jPanel1.setMaximumSize(new java.awt.Dimension(579, 412));
+        jPanel1.setMinimumSize(new java.awt.Dimension(579, 412));
 
         btnStart.setBackground(new java.awt.Color(255, 255, 255));
         btnStart.setFont(new java.awt.Font("Rockwell", 0, 18)); // NOI18N
@@ -158,6 +152,11 @@ public class ClientFemale extends javax.swing.JFrame {
             }
         });
 
+        jLabel1.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(102, 102, 102));
+        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel1.setText("DateInAja");
+
         btnEnd.setBackground(new java.awt.Color(255, 255, 255));
         btnEnd.setFont(new java.awt.Font("Rockwell", 0, 18)); // NOI18N
         btnEnd.setForeground(new java.awt.Color(51, 51, 51));
@@ -171,12 +170,10 @@ public class ClientFemale extends javax.swing.JFrame {
             }
         });
 
-        inputType.setFont(new java.awt.Font("Rockwell", 0, 12)); // NOI18N
-        inputType.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                inputTypeActionPerformed(evt);
-            }
-        });
+        Chat.setColumns(20);
+        Chat.setFont(new java.awt.Font("Rockwell", 0, 12)); // NOI18N
+        Chat.setRows(5);
+        jScrollPane1.setViewportView(Chat);
 
         btnSend.setFont(new java.awt.Font("Rockwell", 0, 18)); // NOI18N
         btnSend.setForeground(new java.awt.Color(51, 51, 51));
@@ -187,48 +184,66 @@ public class ClientFemale extends javax.swing.JFrame {
             }
         });
 
+        inputType.setFont(new java.awt.Font("Rockwell", 0, 12)); // NOI18N
+        inputType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                inputTypeActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(inputType)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                        .addGap(23, 23, 23)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 46, Short.MAX_VALUE)
+                        .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(37, 37, 37)
+                        .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(33, 33, 33))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(2, 2, 2)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGap(15, 15, 15)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(inputType, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSend))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPane1)
-                        .addContainerGap())
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
-                        .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(37, 37, 37)
-                        .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, 109, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(42, 42, 42))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(inputType)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnSend, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())))
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnStart, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEnd, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 65, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(inputType, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSend))
-                .addGap(23, 23, 23))
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -254,6 +269,7 @@ public class ClientFemale extends javax.swing.JFrame {
         
         inputType.setText("");
         inputType.requestFocus();
+
     }//GEN-LAST:event_btnSendActionPerformed
 
     private void btnStartActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnStartActionPerformed
@@ -261,13 +277,12 @@ public class ClientFemale extends javax.swing.JFrame {
    
         if(isConnected==false)
         try {
-            Socket = new Socket(Addr, Port);
-            InputStreamReader streamreader = new InputStreamReader(Socket.getInputStream());
+            socket = new Socket(Addr, Port);
+            InputStreamReader streamreader = new InputStreamReader(socket.getInputStream());
             Reader = new BufferedReader(streamreader);
-            Writer = new PrintWriter(Socket.getOutputStream());
+            Writer = new PrintWriter(socket.getOutputStream());
             Writer.println(nameUser + ":Has Connected :C");
-            Writer.flush(); 
-            isConnected = true;
+            Writer.flush();             isConnected = true;
         }catch (Exception ex) {
             Chat.append("            Fail to Connect Server!\n");
         }   
@@ -282,7 +297,6 @@ public class ClientFemale extends javax.swing.JFrame {
         this.setVisible(false);
     }//GEN-LAST:event_btnEndActionPerformed
 
-    
     public static void main(String args[]) 
     {     
         text = args[0];
@@ -295,7 +309,6 @@ public class ClientFemale extends javax.swing.JFrame {
             }
         });
     }
-    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea Chat;
     private javax.swing.JButton btnEnd;
@@ -303,6 +316,7 @@ public class ClientFemale extends javax.swing.JFrame {
     private javax.swing.JButton btnStart;
     private javax.swing.JTextField inputType;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
