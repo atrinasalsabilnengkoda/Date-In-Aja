@@ -1,13 +1,14 @@
 -- phpMyAdmin SQL Dump
--- version 5.0.2
+-- version 4.8.5
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Waktu pembuatan: 15 Des 2020 pada 13.12
--- Versi server: 10.4.14-MariaDB
--- Versi PHP: 7.2.33
+-- Host: 127.0.0.1:3306
+-- Generation Time: Dec 18, 2020 at 11:57 AM
+-- Server version: 5.7.26
+-- PHP Version: 7.3.5
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -18,27 +19,31 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `dateinaja`
+-- Database: `chat_db`
 --
 
 -- --------------------------------------------------------
 
 --
--- Struktur dari tabel `tb_user`
+-- Table structure for table `user_tb`
 --
 
-CREATE TABLE `tb_user` (
-  `username` varchar(50) NOT NULL,
-  `password` varchar(50) NOT NULL,
-  `gender` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+DROP TABLE IF EXISTS `user_tb`;
+CREATE TABLE IF NOT EXISTS `user_tb` (
+  `name` varchar(30) NOT NULL,
+  `pass` varchar(45) NOT NULL,
+  PRIMARY KEY (`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
--- Dumping data untuk tabel `tb_user`
+-- Dumping data for table `user_tb`
 --
 
-INSERT INTO `tb_user` (`username`, `password`, `gender`) VALUES
-('gina', 'gina', 'female');
+INSERT INTO `user_tb` (`name`, `pass`) VALUES
+('agus', '123'),
+('gina', 'gina'),
+('huy', '3'),
+('joko', 'joko');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
