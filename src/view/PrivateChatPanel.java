@@ -32,16 +32,16 @@ import javax.swing.text.html.HTMLEditorKit;
 
 /**
  *
- * @author AnhTu
+ * @author atrin
  */
 public class PrivateChatPanel extends javax.swing.JFrame {
 
-    public String sender, receiver;     //receiver là thằng mà cái frame này đang chat cùng, sender chính là thằng chủ của frame này. sender ko cần thiết lắm
+    public String sender, receiver;     
     public String serverHost;
     public BufferedWriter bw;
     public BufferedReader br;
     HTMLEditorKit htmlKit;
-    HTMLDocument htmlDoc;   //dùng để insert văn bản dạng html vào tpMessage_pc
+    HTMLDocument htmlDoc;   
     
     public PrivateChatPanel() {
         initComponents();
@@ -72,7 +72,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
     public void sendToServer(String line) {
         try {
             this.bw.write(line);
-            this.bw.newLine();   //phải có newLine thì mới dùng đc hàm readLine()
+            this.bw.newLine();   
             this.bw.flush();
         } catch (java.net.SocketException e) {
             JOptionPane.showMessageDialog(this, "Server is closed, can't send message!", "Error", JOptionPane.ERROR_MESSAGE);
@@ -85,7 +85,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
     
     public String recieveFromServer() {
         try {
-            return this.br.readLine();  //chú ý rằng chỉ nhận 1 dòng từ server gửi về thôi, nếu server gửi nhiều dòng thì các dòng sau ko đọc
+            return this.br.readLine();  
         } catch (java.lang.NullPointerException e) {
             System.out.println("[recieveFromServer()] Server is not open yet, or already closed!");
         } catch (IOException ex) {
@@ -94,9 +94,8 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         return null;
     }
     
-    //hiện tại chưa cần phương thức này:
-    public void appendMessage(String msg1, String msg2, Color c1, Color c2) {  //thiết lập 2 loại text khác màu nhau trên 1 dòng
-        //chèn msg1 trước:
+    
+    public void appendMessage(String msg1, String msg2, Color c1, Color c2) {
         int len = tpMessage_pc.getDocument().getLength();
         StyledDocument doc = (StyledDocument) tpMessage_pc.getDocument();
         
@@ -113,7 +112,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
             Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        //sau đó chèn msg2 ngay sau msg1:
+        
         doc = (StyledDocument) tpMessage_pc.getDocument();
         len = len+msg1.length();
         
@@ -124,7 +123,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         //StyleConstants.setAlignment(sas, StyleConstants.ALIGN_RIGHT);
         
         try {
-            doc.insertString(len, msg2+"\n", sas);      //phai xuong dong
+            doc.insertString(len, msg2+"\n", sas);      
         } catch (BadLocationException ex) {
             Logger.getLogger(ClientPanel.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -132,7 +131,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         tpMessage_pc.setCaretPosition(len+msg2.length());
     }
     
-    public void appendMessage_Left(String msg1, String msg2) {      //dành cho người mà user này đang chat cùng
+    public void appendMessage_Left(String msg1, String msg2) {   
         try {
             htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), "<p style=\"color:black; padding: 3px; margin-top: 4px; margin-right:35px; text-align:left; font:normal 12px Tahoma;\"><span style=\"background-color:#f3f3f3;\"><b>" + msg1 + "</b><span style=\"color:black;\">" + msg2 + "</span></span></p>", 0, 0, null);
         } catch (BadLocationException | IOException ex) {
@@ -141,7 +140,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         tpMessage_pc.setCaretPosition(tpMessage_pc.getDocument().getLength());
     }
     
-    public void appendMessage_Left(String msg1, String msg2, String color1, String color2) {      //dành cho người mà user này đang chat cùng
+    public void appendMessage_Left(String msg1, String msg2, String color1, String color2) { 
         try {
             htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), "<p style=\"color:" + color1 + "; padding: 3px; margin-top: 4px; margin-right:35px; text-align:left; font:normal 12px Tahoma;\"><span><b>" + msg1 + "</b><span style=\"color:" + color2 + ";\">" + msg2 + "</span></span></p><br/>", 0, 0, null);
         } catch (BadLocationException | IOException ex) {
@@ -150,7 +149,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         tpMessage_pc.setCaretPosition(tpMessage_pc.getDocument().getLength());
     }
     
-    public void appendMessage_Right(String msg1, String msg2) {     //dành cho người user này
+    public void appendMessage_Right(String msg1, String msg2) {    
         try { 
             //htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), "<p style=\"color:blue; margin-left:30px; text-align:right; font:normal 12px Tahoma;\"><b>" + msg1 + "</b><span style=\"color:black;\">" + msg2 + "</span></p>", 0, 0, null);
             htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), "<p style=\"color:white; padding: 3px; margin-top: 4px; margin-left:35px; text-align:right; font:normal 12px Tahoma;\"><span style=\"background-color: #889eff; -webkit-border-radius: 10px;\">" + msg2 + "</span></p>", 0, 0, null);
@@ -160,7 +159,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         tpMessage_pc.setCaretPosition(tpMessage_pc.getDocument().getLength());
     }
     
-    public void appendMessage_Right(String msg1) {     //dành cho người user này
+    public void appendMessage_Right(String msg1) {    
         try { 
             //htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), "<p style=\"color:blue; margin-left:30px; text-align:right; font:normal 12px Tahoma;\"><b>" + msg1 + "</b><span style=\"color:black;\">" + msg2 + "</span></p>", 0, 0, null);
             htmlKit.insertHTML(htmlDoc, htmlDoc.getLength(), "<p style=\"color:white; padding: 3px; margin-top: 4px; margin-left:35px; text-align:right; font:normal 12px Tahoma;\"><span style=\"background-color: #889eff; -webkit-border-radius: 10px;\">" + msg1 + "</span></p>", 0, 0, null);
@@ -197,8 +196,8 @@ public class PrivateChatPanel extends javax.swing.JFrame {
         }
 
         try {
-            Socket socketOfReceiver = new Socket(serverHost, 9999);    //tạo mới 1 socket để nhận file, xong việc thì nó TỰ ĐỘNG CLOSE
-            new ReceivingFileThread(socketOfReceiver, myDownloadFolder, buttonName, this).start();    //socketOfClient chính là thằng nhận file
+            Socket socketOfReceiver = new Socket(serverHost, 9999);    
+            new ReceivingFileThread(socketOfReceiver, myDownloadFolder, buttonName, this).start();    
             System.out.println("start receiving file");
         } catch (IOException ex) {
             Logger.getLogger(PrivateChatPanel.class.getName()).log(Level.SEVERE, null, ex);

@@ -91,7 +91,60 @@ public class ClientPanel extends javax.swing.JPanel {
     public JLabel getLbSmile() {
         return lbSmile;
     }
-         
+    
+    //phương thức này ko hiệu quả lắm
+    public void appendMessage2(String msg1, String msg2, Color c1, Color c2) {  //thiết lập 2 loại text khác màu nhau trên 1 dòng
+        tpMessage.setEditable(true);
+        //chèn msg1 trước:
+        int len = tpMessage.getDocument().getLength();
+        
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c1);
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Impact"); //  FontFamily: thiết lập font, chú ý font này là kiểu đậm chứ ko phải ta thiết lập cho nó đậm nhé
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);     //cái này chưa biết tác dụng làm j
+        aset = sc.addAttribute(aset, StyleConstants.FontSize, 14);      //kích thước font
+        
+        tpMessage.setCaretPosition(len);    //vị trí cần chèn text
+        tpMessage.setCharacterAttributes(aset, false);  //thiết lập thuộc tính cho text cần chèn
+        tpMessage.replaceSelection(msg1);   //chèn text vào vị trí trên
+        
+        //chèn msg2 ngay sau msg1:
+        len = len + msg1.length();
+        
+        sc = StyleContext.getDefaultStyleContext();
+        
+        aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c2); 
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Arial"); //  FontFamily: thiết lập font
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);     //cái này chưa biết tác dụng làm j
+        aset = sc.addAttribute(aset, StyleConstants.FontSize, 14);      //kích thước font
+        
+        tpMessage.setCaretPosition(len);
+        tpMessage.setCharacterAttributes(aset, false);
+        tpMessage.replaceSelection(msg2+"\n");   //nhớ xuống dòng
+        
+        len = len + msg2.length();
+        tpMessage.setCaretPosition(len);
+        tpMessage.setEditable(false);
+    }
+    
+    //phương thức này ko hiệu quả lắm
+    public void appendMessage2(String message, Color color) {
+        int len = tpMessage.getDocument().getLength();
+        StyleContext sc = StyleContext.getDefaultStyleContext();
+        AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
+        
+        aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Comic Sans MS"); //  FontFamily: thiết lập font
+        
+        aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);     //cái này chưa biết tác dụng làm j
+        aset = sc.addAttribute(aset, StyleConstants.FontSize, 14);      //kích thước font
+        
+        tpMessage.setCaretPosition(len);    //vị trí cần chèn text
+        tpMessage.setCharacterAttributes(aset, false);  //thiết lập thuộc tính cho text cần chèn
+        tpMessage.replaceSelection(message+"\n");   //chèn text vào vị trí trên
+        
+    }  
+    
     public void appendMessage(String msg1, String msg2, Color c1, Color c2) {  // set two different color text on one line
         // insert msg1 first:
         int len = tpMessage.getDocument().getLength();
