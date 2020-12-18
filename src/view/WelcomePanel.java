@@ -45,21 +45,22 @@ public class WelcomePanel extends javax.swing.JPanel {
         btSignUp_welcome = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
 
+        setBackground(new java.awt.Color(153, 204, 255));
+
         jLabel1.setFont(new java.awt.Font("Arial", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 51, 255));
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
         jLabel1.setText("Welcome to ChatSocket");
 
+        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(102, 102, 255))); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
         jLabel3.setText("Create new account to use this app");
 
         btLogin_welcome.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        btLogin_welcome.setForeground(new java.awt.Color(0, 0, 204));
         btLogin_welcome.setText("Login");
 
         btSignUp_welcome.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
-        btSignUp_welcome.setForeground(new java.awt.Color(0, 0, 204));
         btSignUp_welcome.setText("Sign up");
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N

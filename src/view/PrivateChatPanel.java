@@ -225,7 +225,9 @@ public class PrivateChatPanel extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lbReceiver.setFont(new java.awt.Font("Tahoma", 0, 16)); // NOI18N
+        jPanel1.setBackground(new java.awt.Color(153, 204, 255));
+
+        lbReceiver.setFont(new java.awt.Font("Tahoma", 1, 16)); // NOI18N
         lbReceiver.setText("Receiver");
 
         tpMessage_pc.setEditable(false);
@@ -238,7 +240,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
             }
         });
 
-        btSend_pc.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        btSend_pc.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btSend_pc.setText("Send");
         btSend_pc.setToolTipText("send a message");
         btSend_pc.addActionListener(new java.awt.event.ActionListener() {
@@ -247,7 +249,7 @@ public class PrivateChatPanel extends javax.swing.JFrame {
             }
         });
 
-        btFile_pc.setFont(new java.awt.Font("Comic Sans MS", 0, 14)); // NOI18N
+        btFile_pc.setFont(new java.awt.Font("Comic Sans MS", 1, 14)); // NOI18N
         btFile_pc.setText("File");
         btFile_pc.setToolTipText("send a file");
         btFile_pc.addActionListener(new java.awt.event.ActionListener() {

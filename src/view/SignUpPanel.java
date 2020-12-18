@@ -76,8 +76,9 @@ public class SignUpPanel extends javax.swing.JPanel {
         jLabel3 = new javax.swing.JLabel();
         tfHost = new javax.swing.JTextField();
 
+        setBackground(new java.awt.Color(204, 204, 255));
+
         jLabel1.setFont(new java.awt.Font("Comic Sans MS", 1, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 204));
         jLabel1.setText("Sign up");
 
         jLabel2.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
@@ -96,7 +97,6 @@ public class SignUpPanel extends javax.swing.JPanel {
         tfPass2.setFont(new java.awt.Font("Tahoma", 0, 18)); // NOI18N
 
         btSignUp.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        btSignUp.setForeground(new java.awt.Color(0, 0, 204));
         btSignUp.setText("Sign up");
         btSignUp.setToolTipText("create new account");
 

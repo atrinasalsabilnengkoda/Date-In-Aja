@@ -80,9 +80,11 @@ public class RoomChatPanel extends javax.swing.JPanel {
         lbRoom8 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
 
-        lbRoom1.setBackground(new java.awt.Color(153, 204, 255));
+        setBackground(new java.awt.Color(255, 204, 153));
+
+        lbRoom1.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom1.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom1.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom1.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom1.setText("Room 1");
         lbRoom1.setOpaque(true);
@@ -90,23 +92,23 @@ public class RoomChatPanel extends javax.swing.JPanel {
         jLabel2.setFont(new java.awt.Font("Rockwell", 1, 24)); // NOI18N
         jLabel2.setText("Choose room");
 
-        lbRoom3.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom3.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom3.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom3.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom3.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom3.setText("Room 3");
         lbRoom3.setOpaque(true);
 
-        lbRoom2.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom2.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom2.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom2.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom2.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom2.setText("Room 2");
         lbRoom2.setOpaque(true);
 
-        lbRoom4.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom4.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom4.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom4.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom4.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom4.setText("Room 4");
         lbRoom4.setOpaque(true);
@@ -124,36 +126,35 @@ public class RoomChatPanel extends javax.swing.JPanel {
         jLabel1.setText("Online");
         jLabel1.setToolTipText("");
 
-        lbRoom5.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom5.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom5.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom5.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom5.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom5.setText("Room 5");
         lbRoom5.setOpaque(true);
 
-        lbRoom6.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom6.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom6.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom6.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom6.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom6.setText("Room 6");
         lbRoom6.setOpaque(true);
 
-        lbRoom7.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom7.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom7.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom7.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom7.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom7.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom7.setText("Room 7");
         lbRoom7.setOpaque(true);
 
-        lbRoom8.setBackground(new java.awt.Color(153, 204, 255));
+        lbRoom8.setBackground(new java.awt.Color(255, 255, 255));
         lbRoom8.setFont(new java.awt.Font("Comic Sans MS", 0, 18)); // NOI18N
-        lbRoom8.setForeground(new java.awt.Color(0, 102, 255));
+        lbRoom8.setForeground(new java.awt.Color(255, 204, 153));
         lbRoom8.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbRoom8.setText("Room 8");
         lbRoom8.setOpaque(true);
 
         jLabel3.setFont(new java.awt.Font("Rockwell", 1, 36)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(51, 102, 255));
         jLabel3.setText("DateInAja");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);

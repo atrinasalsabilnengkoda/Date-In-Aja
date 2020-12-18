@@ -91,59 +91,7 @@ public class ClientPanel extends javax.swing.JPanel {
     public JLabel getLbSmile() {
         return lbSmile;
     }
-    
-    /*    public void appendMessage2(String msg1, String msg2, Color c1, Color c2) {  // set two different color text on one line
-    tpMessage.setEditable(true);
-    // insert msg1 first:
-    int len = tpMessage.getDocument().getLength();
-    
-    StyleContext sc = StyleContext.getDefaultStyleContext();
-    
-    AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c1);
-    aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Impact");
-    aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
-    aset = sc.addAttribute(aset, StyleConstants.FontSize, 14);
-    
-    tpMessage.setCaretPosition(len);    // position to insert text
-    tpMessage.setCharacterAttributes(aset, false);  // set properties for the text to insert
-    tpMessage.replaceSelection(msg1);   // insert text in the above position
-    
-    // insert msg2 immediately after msg1:
-    len = len + msg1.length();
-    
-    sc = StyleContext.getDefaultStyleContext();
-    
-    aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, c2);
-    aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Arial");
-    aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
-    aset = sc.addAttribute(aset, StyleConstants.FontSize, 14);
-    
-    tpMessage.setCaretPosition(len);
-    tpMessage.setCharacterAttributes(aset, false);
-    tpMessage.replaceSelection(msg2+"\n");
-    
-    len = len + msg2.length();
-    tpMessage.setCaretPosition(len);
-    tpMessage.setEditable(false);
-    }
-    
-    public void appendMessage2(String message, Color color) {
-    int len = tpMessage.getDocument().getLength();
-    StyleContext sc = StyleContext.getDefaultStyleContext();
-    AttributeSet aset = sc.addAttribute(SimpleAttributeSet.EMPTY, StyleConstants.Foreground, color);
-    
-    aset = sc.addAttribute(aset, StyleConstants.FontFamily, "Comic Sans MS");
-    
-    aset = sc.addAttribute(aset, StyleConstants.Alignment, StyleConstants.ALIGN_JUSTIFIED);
-    aset = sc.addAttribute(aset, StyleConstants.FontSize, 14);
-    
-    tpMessage.setCaretPosition(len);
-    tpMessage.setCharacterAttributes(aset, false);
-    tpMessage.replaceSelection(message+"\n");
-    
-    }   */
-     
-    //we should use this method
+         
     public void appendMessage(String msg1, String msg2, Color c1, Color c2) {  // set two different color text on one line
         // insert msg1 first:
         int len = tpMessage.getDocument().getLength();
